@@ -126,5 +126,7 @@ ___
 - File Uploads: Securely upload and manage images via Google Drive API.
 - Authentication: Simplified login with NextAuth.js.
 ___
+#### Special thanks to Coding with Dawid on YouTube for inspiring and teaching Next.js concepts!
+___
 ##⭐ **Star the Repository**
 If you find this project helpful, give it a star ⭐ on GitHub and share your thoughts!
