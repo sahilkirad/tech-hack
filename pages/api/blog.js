@@ -1,6 +1,5 @@
 import { Blog } from "@/models/Blog";
 import { mongooseConnect } from "@/lib/mongoose";
-import { isAdminRequest } from "@/pages/api/auth/[...nextauth]";
 
 export default async function handler(req, res) {
   const { method } = req;
