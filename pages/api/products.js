@@ -1,38 +1,48 @@
-import {Product} from "@/models/Product";
-import {mongooseConnect} from "@/lib/mongoose";
-import {isAdminRequest} from "@/pages/api/auth/[...nextauth]";
+import { Product } from "@/models/Product";
+import { mongooseConnect } from "@/lib/mongoose";
 
 export default async function handle(req, res) {
-  const {method} = req;
+  const { method } = req;
+
   await mongooseConnect();
-  await isAdminRequest(req,res);
 
-  if (method === 'GET') {
-    if (req.query?.id) {
-      res.json(await Product.findOne({_id:req.query.id}));
-    } else {
-      res.json(await Product.find());
+  switch (method) {
+    case 'GET':
+      if (req.query?.id) {
+        const product = await Product.findOne({ _id: req.query.id });
+        return res.status(200).json(product);
+      } else {
+        const products = await Product.find();
+        return res.status(200).json(products);
+      }
+
+    case 'POST': {
+      const { title, description, price, images, properties } = req.body;
+      const productDoc = await Product.create({
+        title,
+        description,
+        price,
+        images,
+        properties,
+      });
+      return res.status(201).json(productDoc);
     }
-  }
 
-  if (method === 'POST') {
-    const {title,description,price,images,properties} = req.body;
-    const productDoc = await Product.create({
-      title,description,price,images,properties,
-    })
-    res.json(productDoc);
-  }
-
-  if (method === 'PUT') {
-    const {title,description,price,images,properties,_id} = req.body;
-    await Product.updateOne({_id}, {title,description,price,images,properties});
-    res.json(true);
-  }
-
-  if (method === 'DELETE') {
-    if (req.query?.id) {
-      await Product.deleteOne({_id:req.query?.id});
-      res.json(true);
+    case 'PUT': {
+      const { _id, title, description, price, images, properties } = req.body;
+      await Product.updateOne({ _id }, { title, description, price, images, properties });
+      return res.status(200).json({ success: true });
     }
+
+    case 'DELETE': {
+      if (req.query?.id) {
+        await Product.deleteOne({ _id: req.query.id });
+        return res.status(200).json({ success: true });
+      }
+      return res.status(400).json({ error: 'Product ID required' });
+    }
+
+    default:
+      return res.status(405).json({ error: 'Method not allowed' });
   }
 }

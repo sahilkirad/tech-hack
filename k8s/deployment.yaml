@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-app
+  name: nextjs-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: node
+      app: nextjs
   template:
     metadata:
       labels:
-        app: node
+        app: nextjs
     spec:
       containers:
-      - name: node
-        image: yourdockerid/simple-node-app:latest
-        ports:
-        - containerPort: 3000
+        - name: nextjs
+          image: your-dockerhub-username/nextjs:latest
+          ports:
+            - containerPort: 3000

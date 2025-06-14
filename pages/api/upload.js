@@ -2,7 +2,6 @@ import multiparty from 'multiparty';
 import fs from 'fs';
 import { google } from 'googleapis';
 import { mongooseConnect } from '@/lib/mongoose';
-import { isAdminRequest } from '@/pages/api/auth/[...nextauth]';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -63,9 +62,6 @@ const drive = google.drive({ version: 'v3', auth: oauth2Client });
 export default async function handle(req, res) {
   // Connect to MongoDB
   await mongooseConnect();
-
-  // Ensure the user is an admin
-  await isAdminRequest(req, res);
 
   const form = new multiparty.Form();
 
